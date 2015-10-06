@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/CoorpAcademy/trellit/issues"
   },
-  "homepage": "https://github.com/CoorpAcademy/trellit#readme"
+  "homepage": "https://github.com/CoorpAcademy/trellit#readme",
+  "dependencies": {
+    "express": "^4.13.3"
+  }
 }
