@@ -1,0 +1,23 @@
+{
+  "name": "trellit",
+  "version": "1.0.0",
+  "description": "Synchronization app between Trello and Github",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CoorpAcademy/trellit.git"
+  },
+  "keywords": [
+    "trello",
+    "github"
+  ],
+  "author": "Jordane Giuly",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CoorpAcademy/trellit/issues"
+  },
+  "homepage": "https://github.com/CoorpAcademy/trellit#readme"
+}
