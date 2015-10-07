@@ -9,7 +9,8 @@ var github = new Github({
 
 
 module.exports = {
-	authenticate: authenticate
+	authenticate: authenticate,
+	webhook: webhook
 }
 
 
@@ -19,4 +20,12 @@ function authenticate() {
 		token: config.accessToken,
 	});
 	console.log('github.authenticate done');
+}
+function webhook(payload) {
+	if (payload.issue && payload.repository) {
+		console.log(payload.action, payload.issue.number, payload.repository.name);
+	} else {
+		console.error(payload);
+	}
+	return payload;
 }
