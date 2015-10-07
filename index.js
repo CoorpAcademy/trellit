@@ -14,4 +14,3 @@ var server = app.listen(PORT, function () {
 });
 
 github.authenticate();
-github.getIssues();

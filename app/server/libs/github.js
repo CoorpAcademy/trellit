@@ -9,29 +9,14 @@ var github = new Github({
 
 
 module.exports = {
-	authenticate: authenticate,
-	getIssues: getIssues
+	authenticate: authenticate
 }
 
 
 function authenticate() {
-	console.log(config.accessToken);
 	github.authenticate({
 		type: 'token',
 		token: config.accessToken,
 	});
 	console.log('github.authenticate done');
-}
-function getIssues(params) {
-	params = params || {};
-	console.log('getIssues with params', params);
-	return github.issues.repoIssues({
-		user: config.user,
-		repo: config.repo,
-		state: params.state || 'all',
-		per_page: params.perPage || 30
-	}, function(err, issues) {
-		if (err) { console.error(err); }
-		else { console.log('#issues', issues.length); }
-	});
 }
