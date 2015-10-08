@@ -1,4 +1,4 @@
-var url = 'http://gitello.coorpacademy.com/';
+var url = 'http://gitello.coorpacademy.com';
 
 if (process.env.NODE_ENV === 'development') {
 	var auth = require('../../../.auth.dev.json');
