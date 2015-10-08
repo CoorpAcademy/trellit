@@ -14,7 +14,7 @@ module.exports = {
 	github: {
 		accessToken: process.env.GITHUB_ACCESS_TOKEN || '',
 		user: 'CoorpAcademy',
-		repo: 'coorpacademy-cockpit',
+		repo: 'trellit',
 		callbackUrl: '/webhooks/github'
 	},
 	trello: {
