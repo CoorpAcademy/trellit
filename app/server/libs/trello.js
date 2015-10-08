@@ -40,17 +40,19 @@ function webhook(payload) {
 	return promise;
 }
 function handleCreateCard(card) {
-	var body = '[Trello card ' + card.idShort + '](https://trello.com/c/' + card.shortLink + ')'
-	//console.log(card);
+	console.log('trello.handleCreateCard', card.idShort);
+	var body = '[Trello card ' + card.idShort + '](https://trello.com/c/' + card.shortLink + ')';
 	return github.createIssue({
 		title: card.name,
 		body: body
 	}).then(function(issue) {
+		console.log('github.createIssue', issue.number);
 		return trello.postAsync('/1/cards/' + card.id + '/attachments', {
 			url: issue.html_url,
 			name: '#' + issue.number
 		});
 	}).then(function(attachment) {
+		console.log('trello.postAttachment', attachment.url);
 		return card;
 	});
 }
