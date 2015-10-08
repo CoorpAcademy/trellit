@@ -39,4 +39,5 @@ var server = app.listen(PORT, function () {
 });
 
 github.authenticate();
+trello.init();
 trello.createWebhook();
