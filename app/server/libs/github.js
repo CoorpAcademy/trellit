@@ -1,12 +1,6 @@
-var Github = require('github');
+var github = require('github');
 var config = require('../config/config.js').github;
-
-// first we initialize the github object
-var github = new Github({
-	version: '3.0.0',
-	protocol: 'https'
-});
-
+var GITHUB;
 
 module.exports = {
 	authenticate: authenticate,
@@ -15,7 +9,12 @@ module.exports = {
 
 
 function authenticate() {
-	github.authenticate({
+	// first we initialize the github object
+	GITHUB = new github({
+		version: '3.0.0',
+		protocol: 'https'
+	});
+	GITHUB.authenticate({
 		type: 'token',
 		token: config.accessToken,
 	});
