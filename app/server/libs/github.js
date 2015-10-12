@@ -1,12 +1,14 @@
 var GITHUB = require('github');
-var config = require('../config/config.js').github;
+var config = require('../config/config').github;
 var Promise = require('bluebird');
+var URL = require('url');
 var github;
+
 
 module.exports = {
 	authenticate: authenticate,
-	webhook: webhook,
-	createIssue: createIssue
+	createIssue: createIssue,
+	getCardId: getCardId
 }
 
 
@@ -27,14 +29,6 @@ function authenticate() {
 	});
 	console.log('github.authenticate done');
 }
-function webhook(payload) {
-	if (payload.issue && payload.repository) {
-		console.log(payload.action, payload.issue.number, payload.repository.name);
-	} else {
-		console.error(payload);
-	}
-	return payload;
-}
 function createIssue(issue) {
 	return github.issues.createAsync({
 		user: config.user,
@@ -42,4 +36,14 @@ function createIssue(issue) {
 		body: issue.body,
 		title: issue.title
 	});
+}
+function getCardId(issue) {
+	var cardUrl = issue.body.match(/https:\/\/trello.com[^\)]*/g)[0]; var cardShortId;
+	if (cardUrl) {
+		cardShortId = URL.parse(cardUrl).pathname.split('/c/')[1];
+	} else {
+		// TODO retrieve comments
+		//https://api.github.com/repos/CoorpAcademy/trellit/issues/24/comments
+	}
+	return cardShortId;
 }

@@ -1,16 +1,19 @@
 var Trello = require('node-trello');
-var config = require('../config/config.js').trello;
-var APP_URL = require('../config/config.js').url;
+var config = require('../config/config').trello;
+var APP_URL = require('../config/config').url;
 var request = require('request');
-var github = require('./github.js');
+var github = require('./github');
 var Promise = require('bluebird');
+var _ = require('lodash');
 var trello;
 
 
 module.exports = {
 	init: init,
 	createWebhook: createWebhook,
-	webhook: webhook
+	addMembers: addMembers,
+	moveCardToList: moveCardToList,
+	addAttachment: addAttachment
 }
 
 
@@ -24,35 +27,25 @@ function createWebhook() {
 	request.post('https://api.trello.com/1/tokens/' + config.accessToken + '/webhooks/?key=' + config.publicKey, { form: {
 		description: 'My first webhook',
 		callbackURL: APP_URL + config.callbackUrl,
-		idModel: config.boardId
+		idModel: config.board.boardId
 	} }, function(err, res, body) {
 		if (err) { console.log('ERROR', err); }
 		else { console.log(body); }
 	});
 }
-function webhook(payload) {
-	var promise;
-	if (payload.action) {
-		if (payload.action.type === 'createCard') {
-			promise = handleCreateCard(payload.action.data.card);
-		}
-	}
-	return promise;
+function addMembers(cardId, members) {
+	var membersId = _.map(members, function(member) {
+		return member.trello.id;
+	}).join(',');
+	console.log(membersId);
+	return trello.putAsync('/1/cards/' + cardId + '/idMembers', { value: membersId });
 }
-function handleCreateCard(card) {
-	console.log('trello.handleCreateCard', card.idShort);
-	var body = '[Trello card ' + card.idShort + '](https://trello.com/c/' + card.shortLink + ')';
-	return github.createIssue({
-		title: card.name,
-		body: body
-	}).then(function(issue) {
-		console.log('github.createIssue', issue.number);
-		return trello.postAsync('/1/cards/' + card.id + '/attachments', {
-			url: issue.html_url,
-			name: '#' + issue.number
-		});
-	}).then(function(attachment) {
-		console.log('trello.postAttachment', attachment.url);
-		return card;
+function moveCardToList(cardId, listName) {
+	return trello.putAsync('/1/cards/' + cardId + '/idList', { value: config.board.lists[listName] });
+}
+function addAttachment(card, issue) {
+	return trello.postAsync('/1/cards/' + card.id + '/attachments', {
+		url: issue.html_url,
+		name: '#' + issue.number
 	});
 }
