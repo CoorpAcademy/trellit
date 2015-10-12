@@ -32,12 +32,7 @@ module.exports = {
 	trello: {
 		publicKey: process.env.TRELLO_PUBLIC || '',
 		accessToken: process.env.TRELLO_TOKEN || '',
-		board: {
-			boardId: '55fa8a07f150fe773e901c4d',
-			lists: {
-				inProgress: '560a581ae66d38d7816086bc'
-			}
-		},
+		board: board,
 		callbackUrl: '/webhooks/trello'
 	}
 }
