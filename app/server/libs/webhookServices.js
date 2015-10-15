@@ -4,7 +4,8 @@ var members = require('./db').members;
 
 module.exports = {
 	init: init,
-	webhook: webhook
+	webhook: webhook,
+	getWebhooks: getWebhooks
 }
 
 function init() {
@@ -14,8 +15,14 @@ function init() {
 }
 function webhook(service, payload) {
 	var promise;
-	if (service === 'github' && payload.action && payload.action === 'assigned') {
-		promise = handleAssigned(payload);
+	if (service === 'github' && payload.action) {
+		console.log(payload.action);
+		if (payload.action === 'assigned') {
+			promise = handleAssigned(payload);
+		}
+		if (payload.action === 'open') {
+			// TODO
+		}
 	}
 	if (service === 'trello' && payload.action) {
 		console.log(payload.action.type);
@@ -26,13 +33,20 @@ function webhook(service, payload) {
 	return promise;
 }
 function handleAssigned(payload) {
-	var cardId = github.getCardId(payload.issue);
+	var issue = payload.issue || payload.pull_request;
+	var cardId = github.getCardId(issue);
 	if (cardId) {
 		var member = members.get('github.login', payload.assignee.login);
+		console.log(member);
 		if (member) {
-			return trello.addMembers(cardId, [member])
+			return trello.addMember(cardId, member)
 			.then(function(card) {
-				return trello.moveCardToList(cardId, 'inProgress');
+				if (payload.issue) {
+					return trello.moveCardToList(cardId, 'inProgress');
+				}
+				if (payload.pull_request) {
+					return trello.moveCardToList(cardId, 'toReview');
+				}
 			});
 		}
 	} else {
@@ -52,4 +66,7 @@ function handleCreateCard(card) {
 		console.log('trello.postAttachment', attachment.url);
 		return card;
 	});
+}
+function getWebhooks() {
+	return trello.getWebhooks();
 }
