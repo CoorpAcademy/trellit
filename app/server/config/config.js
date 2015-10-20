@@ -4,12 +4,15 @@ var boards = {
 };
 var lists = {
 	backlog: '562616318bbc8958aa72a18c',
-	todo: 'TODO',
+	todo: '56128ed20f503e65784153ae',
 	inProgress: '561244c5945acda7e5626f90',
 	toReview: '561244d2b74a46b20115ea3c',
 	toTest: '561244d5d3830880a92e8c1e',
 	done: '561b9681095780ac16807534'
 }
+var repos = [
+
+]
 
 if (process.env.NODE_ENV === 'development') {
 	var auth = require('../../../.auth.dev.json');
@@ -29,6 +32,12 @@ if (process.env.NODE_ENV === 'development') {
 		toTest: '56027a7779381592829ffa89',
 		done: '5601f04b98142f9e3caa68f1'
 	};
+	repos = [
+		{
+			user: 'CoorpAcademy',
+			repo: 'trellit'
+		}
+	]
 }
 
 module.exports = {
@@ -36,9 +45,8 @@ module.exports = {
 	url: url,
 	github: {
 		accessToken: process.env.GITHUB_ACCESS_TOKEN || '',
-		user: 'CoorpAcademy',
-		repo: 'trellit',
-		callbackUrl: '/webhooks/github'
+		callbackUrl: '/webhooks/github',
+		repositories: repos
 	},
 	trello: {
 		publicKey: process.env.TRELLO_PUBLIC || '',
