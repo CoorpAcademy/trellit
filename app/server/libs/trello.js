@@ -10,6 +10,7 @@ var trello;
 
 module.exports = {
 	init: init,
+	getCard: getCard,
 	createCard: createCard,
 	addAttachment: addAttachment,
 	addMember: addMember,
@@ -24,6 +25,9 @@ function init() {
 	trello = new Trello(config.publicKey, config.accessToken);
 	Promise.promisifyAll(trello);
 	console.log('trello.init done');
+}
+function getCard(id) {
+	return trello.getAsync('/1/cards/' + id); 
 }
 function createCard(issue, member) {
 	return trello.postAsync('/1/cards/', { 
@@ -46,7 +50,8 @@ function addMember(cardId, member) {
 	});
 }
 function addAttachment(card, issue) {
-	return trello.postAsync('/1/cards/' + card.id + '/attachments', {
+	var id = card.id || card.shortlink;
+	return trello.postAsync('/1/cards/' + id + '/attachments', {
 		url: issue.html_url,
 		name: '#' + issue.number
 	});
