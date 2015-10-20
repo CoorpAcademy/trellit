@@ -17,20 +17,35 @@ function webhook(service, payload) {
 	var promise;
 	if (service === 'github' && payload.action) {
 		console.log(payload.action);
+		if (payload.action === 'opened') {
+			promise = handleNewIssue(payload);
+		}
 		if (payload.action === 'assigned') {
 			promise = handleAssigned(payload);
-		}
-		if (payload.action === 'open') {
-			// TODO
 		}
 	}
 	if (service === 'trello' && payload.action) {
 		console.log(payload.action.type);
 		if (payload.action.type === 'createCard') {
-			promise = handleCreateCard(payload.action.data.card);
+//			promise = handleCreateCard(payload.action.data.card);
 		}
 	}
 	return promise;
+}
+function handleNewIssue(payload) {
+	var issue = payload.issue; var card;
+	if (issue) {
+		issue.repository = payload.repository;
+		var member = members.get('github.login', payload.issue.user.login);
+		return trello.createCard(issue, member)
+		.then(function(_card) {
+			card = _card;
+			return trello.addAttachment(card, issue);
+		})
+		.then(function() {
+			return github.attachCard(issue, card);
+		});
+	}
 }
 function handleAssigned(payload) {
 	var issue = payload.issue || payload.pull_request;

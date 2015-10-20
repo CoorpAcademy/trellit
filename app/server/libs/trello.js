@@ -10,10 +10,11 @@ var trello;
 
 module.exports = {
 	init: init,
-	createWebhook: createWebhook,
+	createCard: createCard,
+	addAttachment: addAttachment,
 	addMember: addMember,
 	moveCardToList: moveCardToList,
-	addAttachment: addAttachment,
+	createWebhook: createWebhook,
 	getWebhooks: getWebhooks
 }
 
@@ -24,22 +25,13 @@ function init() {
 	Promise.promisifyAll(trello);
 	console.log('trello.init done');
 }
-function createWebhook() {
-	request.post('https://api.trello.com/1/tokens/' + config.accessToken + '/webhooks/?key=' + config.publicKey, { form: {
-		description: 'My first webhook',
-		callbackURL: APP_URL + config.callbackUrl,
-		idModel: config.board.boardId
-	} }, function(err, res, body) {
-		if (err) { console.log('ERROR', err); }
-		else { console.log(body); }
-	});
-}
-function getWebhooks() {
-	//request.del('https://api.trello.com/1/tokens/' + config.accessToken + '/webhooks/561ccb1d4e45dc9b7f81ca47?key=' + config.publicKey, 
-	request.get('https://api.trello.com/1/tokens/' + config.accessToken + '/webhooks/?key=' + config.publicKey, 
-	function(err, res, body) {
-		if (err) { console.log('ERROR', err); }
-		else { console.log(body); }
+function createCard(issue, member) {
+	return trello.postAsync('/1/cards/', { 
+		idList: config.lists.backlog,
+		name: issue.title,
+		due: null,
+		pos: 'bottom',
+		idMembers: member.trello.id
 	});
 }
 function addMember(cardId, member) {
@@ -53,12 +45,30 @@ function addMember(cardId, member) {
 		throw err;
 	});
 }
-function moveCardToList(cardId, listName) {
-	return trello.putAsync('/1/cards/' + cardId + '/idList', { value: config.board.lists[listName] });
-}
 function addAttachment(card, issue) {
 	return trello.postAsync('/1/cards/' + card.id + '/attachments', {
 		url: issue.html_url,
 		name: '#' + issue.number
+	});
+}
+function moveCardToList(cardId, listName) {
+	return trello.putAsync('/1/cards/' + cardId + '/idList', { value: config.lists[listName] });
+}
+function createWebhook() {
+	request.post('https://api.trello.com/1/tokens/' + config.accessToken + '/webhooks/?key=' + config.publicKey, { form: {
+		description: 'My first webhook',
+		callbackURL: APP_URL + config.callbackUrl,
+		idModel: config.boards.currentSprint
+	} }, function(err, res, body) {
+		if (err) { console.log('ERROR', err); }
+		else { console.log(body); }
+	});
+}
+function getWebhooks() {
+	//request.del('https://api.trello.com/1/tokens/' + config.accessToken + '/webhooks/5616428c33d53fd9593cb6ff?key=' + config.publicKey, 
+	request.get('https://api.trello.com/1/tokens/' + config.accessToken + '/webhooks/?key=' + config.publicKey, 
+	function(err, res, body) {
+		if (err) { console.log('ERROR', err); }
+		else { console.log(body); }
 	});
 }
