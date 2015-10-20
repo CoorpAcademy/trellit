@@ -14,6 +14,7 @@ module.exports = {
 	createCard: createCard,
 	addAttachment: addAttachment,
 	addMember: addMember,
+	deleteMember: deleteMember,
 	moveCardToList: moveCardToList,
 	createWebhook: createWebhook,
 	getWebhooks: getWebhooks
@@ -42,12 +43,15 @@ function addMember(cardId, member) {
 	console.log(member.trello.id);
 	return trello.postAsync('/1/cards/' + cardId + '/idMembers', { value: member.trello.id })
 	.catch(function(err) {
-		console.log(err);
 		if (err.responseBody === 'member is already on the card') {
+			console.log('member is already on the card');
 			return Promise.resolve(err);
 		}
 		throw err;
 	});
+}
+function deleteMember(cardId, member) {
+	return trello.delAsync('/1/cards/' + cardId + '/idMembers/' + member.trello.id);
 }
 function addAttachment(card, issue) {
 	var id = card.id || card.shortlink;

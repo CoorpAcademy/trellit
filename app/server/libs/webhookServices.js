@@ -29,6 +29,9 @@ function webhook(service, payload) {
 		if (payload.action === 'assigned') {
 			promise = handleAssigned(payload);
 		}
+		if (payload.action === 'unassigned') {
+			promise = handleUnassigned(payload);
+		}
 	}
 	if (service === 'trello' && payload.action) {
 		console.log(payload.action.type);
@@ -86,26 +89,45 @@ function handleClosedPullRequest(payload) {
 	}
 }
 function handleAssigned(payload) {
-	var issue = payload.issue || payload.pull_request;
+	var issue = payload.issue || payload.pull_request; var member; var cardId;
 	issue.repository = payload.repository;
 	return github.getCardId(issue)
-	.then(function(cardId) {
-		if (cardId) {
-			var member = members.get('github.login', payload.assignee.login);
-			if (member) {
-				return trello.addMember(cardId, member)
-				.then(function(card) {
-					if (payload.issue) {
-						return trello.moveCardToList(cardId, 'inProgress');
-					}
-					if (payload.pull_request) {
-						return trello.moveCardToList(cardId, 'toReview');
-					}
-				});
-			}
-		} else {
-			console.log('WARNING: no card found for issue', payload.issue.number);
+	.then(function(_cardId) {
+		cardId = _cardId;
+		if (payload.issue) {
+			return trello.moveCardToList(cardId, 'inProgress');
 		}
+		if (payload.pull_request) {
+			return trello.moveCardToList(cardId, 'toReview');
+		}
+	}).then(function(card) {
+		member = members.get('github.login', payload.assignee.login);
+		if (member) {
+			return trello.addMember(cardId, member)
+		}
+	}).catch(function(err) {
+		console.log(err);
+	});
+}
+function handleUnassigned(payload) {
+	var issue = payload.issue || payload.pull_request; var member; var cardId;
+	issue.repository = payload.repository;
+	return github.getCardId(issue)
+	.then(function(_cardId) {
+		cardId = _cardId;
+		if (payload.issue) {
+			return trello.moveCardToList(cardId, 'todo');
+		}
+		if (payload.pull_request) {
+			return trello.moveCardToList(cardId, 'inProgress');
+		}
+	}).then(function(card) {
+		member = members.get('github.login', payload.assignee.login);
+		if (member) {
+			return trello.deleteMember(cardId, member);
+		}
+	}).catch(function(err) {
+		console.log(err);
 	});
 }
 function handleCreateCard(card) {

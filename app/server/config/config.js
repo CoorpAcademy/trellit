@@ -4,6 +4,7 @@ var boards = {
 };
 var lists = {
 	backlog: '562616318bbc8958aa72a18c',
+	todo: 'TODO',
 	inProgress: '561244c5945acda7e5626f90',
 	toReview: '561244d2b74a46b20115ea3c',
 	toTest: '561244d5d3830880a92e8c1e',
@@ -22,6 +23,7 @@ if (process.env.NODE_ENV === 'development') {
 	};
 	lists = {
 		backlog: '56058332b9be8215c8ebe4d3',
+		todo: '56058332b9be8215c8ebe4d3',
 		inProgress: '560a581ae66d38d7816086bc',
 		toReview: '55fa8b7006b70ca73d29512e',
 		toTest: '56027a7779381592829ffa89',
