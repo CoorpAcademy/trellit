@@ -11,7 +11,9 @@ module.exports = {
 	createIssue: createIssue,
 	getCardId: getCardId,
 	attachCard: attachCard,
-	getAssociatedIssue: getAssociatedIssue
+	getAssociatedIssue: getAssociatedIssue,
+	urlToIssue: urlToIssue,
+	editIssue: editIssue
 }
 
 
@@ -77,5 +79,25 @@ function getAssociatedIssue(pullRequest) {
 		user: pullRequest.repository.owner.login,
 		repo: pullRequest.repository.name,
 		number: number
+	});
+}
+function urlToIssue(url) {
+	var issue = {
+		repository: {
+			owner: {}
+		}
+	};
+	url = url.replace('https://github.com/', '').split('/');
+	issue.repository.owner.login = url[0];
+	issue.repository.name = url[1];
+	issue.number = url[3];
+	return issue;
+}
+function editIssue(issue, params) {
+	return github.issues.editAsync({
+		user: issue.repository.owner.login,
+		repo: issue.repository.name,
+		number: issue.number,
+		state: params.state
 	});
 }

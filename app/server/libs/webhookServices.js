@@ -1,6 +1,7 @@
 var github = require('./github');
 var trello = require('./trello');
 var members = require('./db').members;
+var config = require('../config/config');
 
 module.exports = {
 	init: init,
@@ -37,6 +38,12 @@ function webhook(service, payload) {
 		console.log(payload.action.type);
 		if (payload.action.type === 'createCard') {
 //			promise = handleCreateCard(payload.action.data.card);
+		}
+		if (payload.action.type === 'updateCard' && payload.action.data.listAfter && payload.action.data.listAfter.id === config.trello.lists.done) {
+			promise = handleDoneCard(payload.action.data.card);
+		}
+		if (payload.action.type === 'updateCard' && payload.action.data.listAfter && payload.action.data.listBefore.id === config.trello.lists.done) {
+			promise = handleReopenedCard(payload.action.data.card);
 		}
 	}
 	return promise;
@@ -126,6 +133,26 @@ function handleUnassigned(payload) {
 		if (member) {
 			return trello.deleteMember(cardId, member);
 		}
+	}).catch(function(err) {
+		console.log(err);
+	});
+}
+function handleDoneCard(card) {
+	return trello.getIssueUrl(card)
+	.then(function(issueUrl) {
+		return github.urlToIssue(issueUrl);
+	}).then(function(issue) {
+		github.editIssue(issue, {state: 'closed'});
+	}).catch(function(err) {
+		console.log(err);
+	});
+}
+function handleReopenedCard(card) {
+	return trello.getIssueUrl(card)
+	.then(function(issueUrl) {
+		return github.urlToIssue(issueUrl);
+	}).then(function(issue) {
+		github.editIssue(issue, {state: 'open'});
 	}).catch(function(err) {
 		console.log(err);
 	});
