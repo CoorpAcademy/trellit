@@ -11,9 +11,10 @@ var trello;
 module.exports = {
 	init: init,
 	createWebhook: createWebhook,
-	addMembers: addMembers,
+	addMember: addMember,
 	moveCardToList: moveCardToList,
-	addAttachment: addAttachment
+	addAttachment: addAttachment,
+	getWebhooks: getWebhooks
 }
 
 
@@ -33,12 +34,24 @@ function createWebhook() {
 		else { console.log(body); }
 	});
 }
-function addMembers(cardId, members) {
-	var membersId = _.map(members, function(member) {
-		return member.trello.id;
-	}).join(',');
-	console.log(membersId);
-	return trello.putAsync('/1/cards/' + cardId + '/idMembers', { value: membersId });
+function getWebhooks() {
+	//request.del('https://api.trello.com/1/tokens/' + config.accessToken + '/webhooks/561ccb1d4e45dc9b7f81ca47?key=' + config.publicKey, 
+	request.get('https://api.trello.com/1/tokens/' + config.accessToken + '/webhooks/?key=' + config.publicKey, 
+	function(err, res, body) {
+		if (err) { console.log('ERROR', err); }
+		else { console.log(body); }
+	});
+}
+function addMember(cardId, member) {
+	console.log(member.trello.id);
+	return trello.postAsync('/1/cards/' + cardId + '/idMembers', { value: member.trello.id })
+	.catch(function(err) {
+		console.log(err);
+		if (err.responseBody === 'member is already on the card') {
+			return Promise.resolve(err);
+		}
+		throw err;
+	});
 }
 function moveCardToList(cardId, listName) {
 	return trello.putAsync('/1/cards/' + cardId + '/idList', { value: config.board.lists[listName] });
