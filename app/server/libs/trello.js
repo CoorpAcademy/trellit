@@ -13,6 +13,7 @@ module.exports = {
 	getCard: getCard,
 	createCard: createCard,
 	addAttachment: addAttachment,
+	getIssueUrl: getIssueUrl,
 	addMember: addMember,
 	deleteMember: deleteMember,
 	moveCardToList: moveCardToList,
@@ -58,6 +59,20 @@ function addAttachment(card, issue) {
 	return trello.postAsync('/1/cards/' + id + '/attachments', {
 		url: issue.html_url,
 		name: '#' + issue.number
+	});
+}
+function getIssueUrl(card) { // TODO handle array of issues
+	var id = card.id || card.shortlink; var issueUrl;
+	return trello.getAsync('/1/cards/' + id + '/attachments')
+	.then(function(attachments) {
+		_.each(attachments, function(attachment) {
+			if (attachment.url && attachment.url.indexOf('https://github.com/') >= 0 && attachment.url.indexOf('issues/') > 0) {
+				issueUrl = attachment.url;
+				return issueUrl;
+			}
+		});
+		return issueUrl;
+		console.log(attachments);
 	});
 }
 function moveCardToList(cardId, listName) {
