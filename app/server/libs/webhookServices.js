@@ -23,6 +23,9 @@ function webhook(service, payload) {
 		if (payload.action === 'opened' && payload.pull_request) {
 			promise = handleNewPullRequest(payload);
 		}
+		if (payload.action === 'closed' && payload.pull_request) {
+			promise = handleClosedPullRequest(payload);
+		}
 		if (payload.action === 'assigned') {
 			promise = handleAssigned(payload);
 		}
@@ -69,6 +72,15 @@ function handleNewPullRequest(payload) {
 	}).catch(function(err) {
 		console.log(err);
 	});
+}
+function handleClosedPullRequest(payload) {
+	var pullRequest = payload.pull_request; var card;
+	if (pullRequest.merged) {
+		return github.getCardId(issue)
+		.then(function(shortLink) {
+			return trello.moveCardToList(shortLink, 'toTest');
+		});
+	}
 }
 function handleAssigned(payload) {
 	var issue = payload.issue || payload.pull_request;
