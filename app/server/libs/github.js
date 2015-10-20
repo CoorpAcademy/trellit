@@ -2,6 +2,7 @@ var GITHUB = require('github');
 var config = require('../config/config').github;
 var Promise = require('bluebird');
 var URL = require('url');
+var _ = require('lodash');
 var github;
 
 
@@ -38,15 +39,23 @@ function createIssue(issue) {
 		title: issue.title
 	});
 }
-function getCardId(issue) { // TODO
-	var cardUrl = issue.body.match(/https:\/\/trello.com[^\)]*/g)[0]; var cardShortId;
-	if (cardUrl) {
-		cardShortId = URL.parse(cardUrl).pathname.split('/c/')[1];
-	} else {
-		// TODO retrieve comments
-		//https://api.github.com/repos/CoorpAcademy/trellit/issues/24/comments
-	}
-	return cardShortId;
+function getCardId(issue) {
+	var cardShortId;
+	return github.issues.getCommentsAsync({
+		user: issue.repository.owner.login,
+		repo: issue.repository.name,
+		number: issue.number,
+		per_page: 100
+	}).then(function(comments) {
+		_.each(comments, function(comment) {
+			var trelloCardUrls = comment.body.replace('&#x2F;', '/').match(/https:\/\/trello.com\/c\/[^\"]*/g);
+			if (trelloCardUrls) {
+				cardShortId = trelloCardUrls[0].replace('https://trello.com/c/', '').split('/')[0];
+				return cardShortId;
+			}
+		});
+		return cardShortId;
+	});
 }
 function attachCard(issue, card) {
 	//console.log(card);

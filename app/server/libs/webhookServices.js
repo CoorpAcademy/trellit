@@ -49,24 +49,27 @@ function handleNewIssue(payload) {
 }
 function handleAssigned(payload) {
 	var issue = payload.issue || payload.pull_request;
-	var cardId = github.getCardId(issue);
-	if (cardId) {
-		var member = members.get('github.login', payload.assignee.login);
-		console.log(member);
-		if (member) {
-			return trello.addMember(cardId, member)
-			.then(function(card) {
-				if (payload.issue) {
-					return trello.moveCardToList(cardId, 'inProgress');
-				}
-				if (payload.pull_request) {
-					return trello.moveCardToList(cardId, 'toReview');
-				}
-			});
+	issue.repository = payload.repository;
+	return github.getCardId(issue)
+	.then(function(cardId) {
+		if (cardId) {
+			var member = members.get('github.login', payload.assignee.login);
+			console.log(member);
+			if (member) {
+				return trello.addMember(cardId, member)
+				.then(function(card) {
+					if (payload.issue) {
+						return trello.moveCardToList(cardId, 'inProgress');
+					}
+					if (payload.pull_request) {
+						return trello.moveCardToList(cardId, 'toReview');
+					}
+				});
+			}
+		} else {
+			console.log('WARNING: no card found for issue', payload.issue.number);
 		}
-	} else {
-		console.log('WARNING: no card found for issue', payload.issue.number);
-	}
+	});
 }
 function handleCreateCard(card) {
 	console.log('trello.handleCreateCard', card.idShort);
