@@ -79,7 +79,9 @@ function handleClosedPullRequest(payload) {
 		pullRequest.repository = payload.repository;
 		return github.getCardId(pullRequest)
 		.then(function(shortLink) {
-			return trello.moveCardToList(shortLink, 'toTest');
+			if (shortLink) {
+				return trello.moveCardToList(shortLink, 'toTest');
+			}
 		});
 	}
 }
