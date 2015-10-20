@@ -39,3 +39,4 @@ var server = app.listen(PORT, function () {
 });
 
 webhooks.init();
+webhooks.getWebhooks();
