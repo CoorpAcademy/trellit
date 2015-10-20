@@ -76,7 +76,7 @@ function handleNewPullRequest(payload) {
 function handleClosedPullRequest(payload) {
 	var pullRequest = payload.pull_request; var card;
 	if (pullRequest.merged) {
-		return github.getCardId(issue)
+		return github.getCardId(pullRequest)
 		.then(function(shortLink) {
 			return trello.moveCardToList(shortLink, 'toTest');
 		});
