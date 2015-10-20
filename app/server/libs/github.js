@@ -10,7 +10,8 @@ module.exports = {
 	authenticate: authenticate,
 	createIssue: createIssue,
 	getCardId: getCardId,
-	attachCard: attachCard
+	attachCard: attachCard,
+	getAssociatedIssue: getAssociatedIssue
 }
 
 
@@ -58,7 +59,6 @@ function getCardId(issue) {
 	});
 }
 function attachCard(issue, card) {
-	//console.log(card);
 	var cardUrl = card.url.replace('/', '&#x2F;');
 	var commentBody = '<a href="' + cardUrl + '"><img src="https:&#x2F;&#x2F;github.trello.services&#x2F;images&#x2F;trello-icon.png" width="12" height="12"> ' + card.name + '</a>';
 	return github.issues.createCommentAsync({
@@ -66,5 +66,16 @@ function attachCard(issue, card) {
 		repo: issue.repository.name,
 		number: issue.number,
 		body: commentBody
+	});
+}
+function getAssociatedIssue(pullRequest) {
+	var numbers = pullRequest.body.match(/\#[0-9]*/g); var number;
+	if (numbers) {
+		number = numbers[0].replace('#', '');
+	}
+	return github.issues.getRepoIssueAsync({
+		user: pullRequest.repository.owner.login,
+		repo: pullRequest.repository.name,
+		number: number
 	});
 }

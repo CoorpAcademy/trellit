@@ -17,8 +17,11 @@ function webhook(service, payload) {
 	var promise;
 	if (service === 'github' && payload.action) {
 		console.log(payload.action);
-		if (payload.action === 'opened') {
+		if (payload.action === 'opened' && payload.issue) {
 			promise = handleNewIssue(payload);
+		}
+		if (payload.action === 'opened' && payload.pull_request) {
+			promise = handleNewPullRequest(payload);
 		}
 		if (payload.action === 'assigned') {
 			promise = handleAssigned(payload);
@@ -34,18 +37,38 @@ function webhook(service, payload) {
 }
 function handleNewIssue(payload) {
 	var issue = payload.issue; var card;
-	if (issue) {
+	issue.repository = payload.repository;
+	var member = members.get('github.login', payload.issue.user.login);
+	return trello.createCard(issue, member)
+	.then(function(_card) {
+		card = _card;
+		return trello.addAttachment(card, issue);
+	})
+	.then(function() {
+		return github.attachCard(issue, card);
+	});
+}
+function handleNewPullRequest(payload) {
+	var pullRequest = payload.pull_request; var card;
+	pullRequest.repository = payload.repository;
+	github.getAssociatedIssue(pullRequest)
+	.then(function(issue) {
+		if (!issue) { console.log('WARNING: no issue found for pullRequest', pullRequest.number); }
+		console.log(issue.number);
 		issue.repository = payload.repository;
-		var member = members.get('github.login', payload.issue.user.login);
-		return trello.createCard(issue, member)
-		.then(function(_card) {
-			card = _card;
-			return trello.addAttachment(card, issue);
-		})
-		.then(function() {
-			return github.attachCard(issue, card);
-		});
-	}
+		return github.getCardId(issue);
+	}).then(function(shortLink) {
+		if (!shortLink) { console.log('WARNING: no card found for pullRequest', pullRequest.number); }
+		console.log(shortLink);
+		return trello.getCard(shortLink);
+	}).then(function(_card) {
+		card = _card;
+		return trello.addAttachment(card, pullRequest);
+	}).then(function() {
+		github.attachCard(pullRequest, card);
+	}).catch(function(err) {
+		console.log(err);
+	});
 }
 function handleAssigned(payload) {
 	var issue = payload.issue || payload.pull_request;
@@ -54,7 +77,6 @@ function handleAssigned(payload) {
 	.then(function(cardId) {
 		if (cardId) {
 			var member = members.get('github.login', payload.assignee.login);
-			console.log(member);
 			if (member) {
 				return trello.addMember(cardId, member)
 				.then(function(card) {
@@ -72,18 +94,18 @@ function handleAssigned(payload) {
 	});
 }
 function handleCreateCard(card) {
-	console.log('trello.handleCreateCard', card.idShort);
-	var body = '[Trello card ' + card.idShort + '](https://trello.com/c/' + card.shortLink + ')';
-	return github.createIssue({
-		title: card.name,
-		body: body
-	}).then(function(issue) {
-		console.log('github.createIssue', issue.number);
-		return trello.addAttachment(card, issue);
-	}).then(function(attachment) {
-		console.log('trello.postAttachment', attachment.url);
-		return card;
-	});
+// 	console.log('trello.handleCreateCard', card.idShort);
+// 	var body = '[Trello card ' + card.idShort + '](https://trello.com/c/' + card.shortLink + ')';
+// 	return github.createIssue({
+// 		title: card.name,
+// 		body: body
+// 	}).then(function(issue) {
+// 		console.log('github.createIssue', issue.number);
+// 		return trello.addAttachment(card, issue);
+// 	}).then(function(attachment) {
+// 		console.log('trello.postAttachment', attachment.url);
+// 		return card;
+// 	});
 }
 function getWebhooks() {
 	return trello.getWebhooks();
