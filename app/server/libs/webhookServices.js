@@ -49,13 +49,21 @@ function webhook(service, payload) {
 function handleNewIssue(payload) {
 	var issue = payload.issue; var card;
 	issue.repository = payload.repository;
+	console.log('handleNewIssue', '| issue number:', issue.number, '| issue repo:', issue.repository.name);
 	var member = members.get('github.login', payload.issue.user.login);
+	if (member) {
+		console.log('handleNewIssue-get member', '| member github login:', member.github.login);
+	} else {
+		console.log('handleNewIssue-get member', '| no member found');
+	}
 	return trello.createCard(issue, member)
 	.then(function(_card) {
 		card = _card;
+		console.log('handleNewIssue-createCard', '| card id:', card.id, '| card name:', card.name, '| card list:', card.idList);
 		return trello.addAttachment(card, issue);
 	})
 	.then(function() {
+		console.log('handleNewIssue-addAttachment');
 		return github.attachCard(issue, card);
 	});
 }
@@ -96,9 +104,11 @@ function handleClosedPullRequest(payload) {
 function handleAssigned(payload) {
 	var issue = payload.issue || payload.pull_request; var member; var cardId;
 	issue.repository = payload.repository;
+	console.log('handleAssigned', '| issue number:', issue.number, '| issue repo:', issue.repository.name);
 	return github.getCardId(issue)
 	.then(function(_cardId) {
 		cardId = _cardId;
+		console.log('handleAssigned-getCardId', '| card id:', cardId);
 		if (payload.issue) {
 			return trello.moveCardToList(cardId, 'inProgress');
 		}
@@ -106,9 +116,13 @@ function handleAssigned(payload) {
 			return trello.moveCardToList(cardId, 'toReview');
 		}
 	}).then(function(card) {
+		console.log('handleAssigned-moveCardToList', '| card id:', cardId, '| list id: ', card.idList);
 		member = members.get('github.login', payload.assignee.login);
 		if (member) {
+			console.log('handleAssigned-get member', '| member github login:', member.github.login);
 			return trello.addMember(cardId, member)
+		} else {
+			console.log('handleAssigned-get member', '| no member found');
 		}
 	}).catch(function(err) {
 		console.log(err);
