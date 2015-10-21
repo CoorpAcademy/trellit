@@ -1,6 +1,15 @@
 [
 	{
 		"github": {
+			"login": "lcalvy"
+		},
+		"trello": {
+			"id": "55ed4db9b0a1d88b74782bed",
+			"username": "loiccalvy1"
+		}
+	},
+	{
+		"github": {
 			"login": "jordanegiuly"
 		},
 		"trello": {
@@ -9,3 +18,4 @@
 		}
 	}
 ]
+

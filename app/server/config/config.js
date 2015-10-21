@@ -11,7 +11,22 @@ var lists = {
 	done: '561b9681095780ac16807534'
 }
 var repos = [
-
+	{
+		user: 'CoorpAcademy',
+		repo: 'coorpacademy'
+	},
+	{
+		user: 'CoorpAcademy',
+		repo: 'coorpacademy-store'
+	},
+	{
+		user: 'CoorpAcademy',
+		repo: 'coorpacademy-connect'
+	},
+	{
+		user: 'CoorpAcademy',
+		repo: 'coorpacademy-www-wp'
+	}
 ]
 
 if (process.env.NODE_ENV === 'development') {
