@@ -78,8 +78,13 @@ function getIssueUrl(card) { // TODO handle array of issues
 }
 function moveCardToList(cardId, listName) {
 	console.log('moveCardToList', '| cardId', cardId, '| board id', config.boards.currentSprint, '| list id', config.lists[listName]);
-	//return trello.putAsync('/1/cards/' + cardId + '/idBoard', { value: config.boards.currentSprint, idList: config.lists[listName] });
-	return trello.putAsync('/1/cards/' + cardId + '/idList', { value: config.lists[listName]});
+	getCard(cardId).then(function(card) {
+		if (card.idBoard === config.boards.currentSprint) {
+			return trello.putAsync('/1/cards/' + cardId + '/idList', { value: config.lists[listName]});
+		} else {
+			return trello.putAsync('/1/cards/' + cardId + '/idBoard', { value: config.boards.currentSprint, idList: config.lists[listName] });
+		}
+	});
 }
 function createWebhook() {
 	request.post('https://api.trello.com/1/tokens/' + config.accessToken + '/webhooks/?key=' + config.publicKey, { form: {

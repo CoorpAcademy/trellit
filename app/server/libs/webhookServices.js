@@ -7,12 +7,15 @@ module.exports = {
 	init: init,
 	webhook: webhook,
 	getWebhooks: getWebhooks,
-	delWebhooks: delWebhooks
+	delWebhooks: delWebhooks,
+	createWebhooks: createWebhooks,
 }
 
 function init() {
 	github.authenticate();
 	trello.init();
+}
+function createWebhooks() {
 	trello.createWebhook();
 	github.createWebhooks();
 }
@@ -20,15 +23,15 @@ function webhook(service, payload) {
 	var promise;
 	if (service === 'github' && payload.action) {
 		console.log(payload.action);
-		// if (payload.action === 'opened' && payload.issue) {
-		// 	promise = handleNewIssue(payload);
-		// }
-		// if (payload.action === 'opened' && payload.pull_request) {
-		// 	promise = handleNewPullRequest(payload);
-		// }
-		// if (payload.action === 'closed' && payload.pull_request) {
-		// 	promise = handleClosedPullRequest(payload);
-		// }
+		if (payload.action === 'opened' && payload.issue) {
+			promise = handleNewIssue(payload);
+		}
+		if (payload.action === 'opened' && payload.pull_request) {
+			promise = handleNewPullRequest(payload);
+		}
+		if (payload.action === 'closed' && payload.pull_request) {
+			promise = handleClosedPullRequest(payload);
+		}
 		if (payload.action === 'assigned') {
 			promise = handleAssigned(payload);
 		}
@@ -38,12 +41,12 @@ function webhook(service, payload) {
 	}
 	if (service === 'trello' && payload.action) {
 		console.log(payload.action.type);
-		// if (payload.action.type === 'updateCard' && payload.action.data.listAfter && payload.action.data.listAfter.id === config.trello.lists.done) {
-		// 	promise = handleDoneCard(payload.action.data.card);
-		// }
-		// if (payload.action.type === 'updateCard' && payload.action.data.listAfter && payload.action.data.listBefore.id === config.trello.lists.done) {
-		// 	promise = handleReopenedCard(payload.action.data.card);
-		// }
+		if (payload.action.type === 'updateCard' && payload.action.data.listAfter && payload.action.data.listAfter.id === config.trello.lists.done) {
+			promise = handleDoneCard(payload.action.data.card);
+		}
+		if (payload.action.type === 'updateCard' && payload.action.data.listAfter && payload.action.data.listBefore.id === config.trello.lists.done) {
+			promise = handleReopenedCard(payload.action.data.card);
+		}
 	}
 	return promise;
 }
@@ -116,8 +119,7 @@ function handleAssigned(payload) {
 		if (payload.pull_request) {
 			return trello.moveCardToList(cardId, 'toReview');
 		}
-	}).then(function(card) {
-		console.log(card);
+	}).then(function() {
 		member = members.get('github.login', payload.assignee.login);
 		if (member) {
 			console.log('handleAssigned-get member', '| member github login:', member.github.login);
