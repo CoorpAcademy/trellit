@@ -1,6 +1,8 @@
 var GITHUB = require('github');
 var config = require('../config/config').github;
+var APP_URL = require('../config/config').url;
 var Promise = require('bluebird');
+var request = require('request');
 var URL = require('url');
 var _ = require('lodash');
 var github;
@@ -8,7 +10,7 @@ var github;
 
 module.exports = {
 	authenticate: authenticate,
-	createIssue: createIssue,
+	createWebhooks: createWebhooks,
 	getCardId: getCardId,
 	attachCard: attachCard,
 	getAssociatedIssue: getAssociatedIssue,
@@ -34,12 +36,23 @@ function authenticate() {
 	});
 	console.log('github.authenticate done');
 }
-function createIssue(issue) {
-	return github.issues.createAsync({
-		user: config.user,
-		repo: config.repo,
-		body: issue.body,
-		title: issue.title
+function createWebhooks() {
+	_.each(config.repositories, function(repository) {
+		github.repos.createHookAsync({
+			user: repository.user,
+			repo: repository.repo,
+			name: 'web',
+			config: {
+				url: APP_URL + config.callbackUrl,
+				content_type: 'json'
+			},
+			events: ['issues', 'pull_request'],
+			active: true
+		}).then(function(webhook) {
+			console.log(webhook.url);
+		}).catch(function(err) {
+			console.log(err.message);
+		});
 	});
 }
 function getCardId(issue) {

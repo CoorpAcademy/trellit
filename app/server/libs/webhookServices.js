@@ -13,6 +13,7 @@ function init() {
 	github.authenticate();
 	trello.init();
 	trello.createWebhook();
+	github.createWebhooks();
 }
 function webhook(service, payload) {
 	var promise;
@@ -36,9 +37,6 @@ function webhook(service, payload) {
 	}
 	if (service === 'trello' && payload.action) {
 		console.log(payload.action.type);
-		if (payload.action.type === 'createCard') {
-//			promise = handleCreateCard(payload.action.data.card);
-		}
 		if (payload.action.type === 'updateCard' && payload.action.data.listAfter && payload.action.data.listAfter.id === config.trello.lists.done) {
 			promise = handleDoneCard(payload.action.data.card);
 		}
@@ -156,20 +154,6 @@ function handleReopenedCard(card) {
 	}).catch(function(err) {
 		console.log(err);
 	});
-}
-function handleCreateCard(card) {
-// 	console.log('trello.handleCreateCard', card.idShort);
-// 	var body = '[Trello card ' + card.idShort + '](https://trello.com/c/' + card.shortLink + ')';
-// 	return github.createIssue({
-// 		title: card.name,
-// 		body: body
-// 	}).then(function(issue) {
-// 		console.log('github.createIssue', issue.number);
-// 		return trello.addAttachment(card, issue);
-// 	}).then(function(attachment) {
-// 		console.log('trello.postAttachment', attachment.url);
-// 		return card;
-// 	});
 }
 function getWebhooks() {
 	return trello.getWebhooks();

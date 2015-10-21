@@ -80,7 +80,7 @@ function moveCardToList(cardId, listName) {
 }
 function createWebhook() {
 	request.post('https://api.trello.com/1/tokens/' + config.accessToken + '/webhooks/?key=' + config.publicKey, { form: {
-		description: 'My first webhook',
+		description: 'Trellit',
 		callbackURL: APP_URL + config.callbackUrl,
 		idModel: config.boards.currentSprint
 	} }, function(err, res, body) {
@@ -89,7 +89,7 @@ function createWebhook() {
 	});
 }
 function getWebhooks() {
-	//request.del('https://api.trello.com/1/tokens/' + config.accessToken + '/webhooks/5616428c33d53fd9593cb6ff?key=' + config.publicKey, 
+	//request.del('https://api.trello.com/1/tokens/' + config.accessToken + '/webhooks/56265747191c845fadbc02d7?key=' + config.publicKey, 
 	request.get('https://api.trello.com/1/tokens/' + config.accessToken + '/webhooks/?key=' + config.publicKey, 
 	function(err, res, body) {
 		if (err) { console.log('ERROR', err); }
