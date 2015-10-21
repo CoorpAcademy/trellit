@@ -52,7 +52,7 @@ if (process.env.NODE_ENV === 'development') {
 			user: 'CoorpAcademy',
 			repo: 'trellit'
 		}
-	]
+	];
 }
 
 module.exports = {

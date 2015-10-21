@@ -1,6 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var config = require('./app/server/config/config.js');
+var request = require('request');
 
 var app = express();
 app.use(bodyParser.urlencoded({
@@ -39,4 +40,4 @@ var server = app.listen(PORT, function () {
 });
 
 webhooks.init();
-webhooks.getWebhooks();
+//webhooks.delWebhooks();
