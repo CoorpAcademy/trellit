@@ -66,7 +66,7 @@ function getCardId(issue) {
 	}).then(function(comments) {
 		console.log('github.getCardId-getCommentsAsync', '| comments.length', comments.length);
 		_.each(comments, function(comment) {
-			comment = comment.body.replace('&#x2F;', '/');
+			comment = comment.body.replace(/&#x2F;/g, '/');
 			console.log('github.getCardId-comment', '| comment', comment);
 			var trelloCardUrls = comment.match(/https:\/\/trello.com\/c\/[^\"]*/g);
 			console.log('github.getCardId-trelloCardUrls', '| trelloCardUrls', trelloCardUrls);
@@ -80,7 +80,7 @@ function getCardId(issue) {
 	});
 }
 function attachCard(issue, card) {
-	var cardUrl = card.url.replace('/', '&#x2F;');
+	var cardUrl = card.url.replace(/\//g, '&#x2F;');
 	var commentBody = '<a href="' + cardUrl + '"><img src="https:&#x2F;&#x2F;github.trello.services&#x2F;images&#x2F;trello-icon.png" width="12" height="12"> ' + card.name + '</a>';
 	return github.issues.createCommentAsync({
 		user: issue.repository.owner.login,
