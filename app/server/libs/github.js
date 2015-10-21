@@ -57,16 +57,22 @@ function createWebhooks() {
 }
 function getCardId(issue) {
 	var cardShortId;
+	console.log('github.getCardId', '| issue number', issue.number, '| issue repo', issue.repository.name);
 	return github.issues.getCommentsAsync({
 		user: issue.repository.owner.login,
 		repo: issue.repository.name,
 		number: issue.number,
 		per_page: 100
 	}).then(function(comments) {
+		console.log('github.getCardId-getCommentsAsync', '| comments.length', comments.length);
 		_.each(comments, function(comment) {
-			var trelloCardUrls = comment.body.replace('&#x2F;', '/').match(/https:\/\/trello.com\/c\/[^\"]*/g);
+			comment = comment.body.replace('&#x2F;', '/');
+			console.log('github.getCardId-comment', '| comment', comment);
+			var trelloCardUrls = comment.match(/https:\/\/trello.com\/c\/[^\"]*/g);
+			console.log('github.getCardId-trelloCardUrls', '| trelloCardUrls', trelloCardUrls);
 			if (trelloCardUrls) {
 				cardShortId = trelloCardUrls[0].replace('https://trello.com/c/', '').split('/')[0];
+				console.log('github.getCardId-cardShortId', '| cardShortId', cardShortId);
 				return cardShortId;
 			}
 		});
