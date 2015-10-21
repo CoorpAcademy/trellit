@@ -28,12 +28,12 @@ function webhook(service, payload) {
 		// if (payload.action === 'closed' && payload.pull_request) {
 		// 	promise = handleClosedPullRequest(payload);
 		// }
-		if (payload.action === 'assigned') {
-			promise = handleAssigned(payload);
-		}
-		if (payload.action === 'unassigned') {
-			promise = handleUnassigned(payload);
-		}
+		// if (payload.action === 'assigned') {
+		// 	promise = handleAssigned(payload);
+		// }
+		// if (payload.action === 'unassigned') {
+		// 	promise = handleUnassigned(payload);
+		// }
 	}
 	if (service === 'trello' && payload.action) {
 		console.log(payload.action.type);
@@ -116,7 +116,7 @@ function handleAssigned(payload) {
 			return trello.moveCardToList(cardId, 'toReview');
 		}
 	}).then(function(card) {
-		console.log('handleAssigned-moveCardToList', '| card id:', cardId, '| list id: ', card.idList);
+		console.log(card);
 		member = members.get('github.login', payload.assignee.login);
 		if (member) {
 			console.log('handleAssigned-get member', '| member github login:', member.github.login);
