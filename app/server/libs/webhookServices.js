@@ -6,7 +6,8 @@ var config = require('../config/config');
 module.exports = {
 	init: init,
 	webhook: webhook,
-	getWebhooks: getWebhooks
+	getWebhooks: getWebhooks,
+	delWebhooks: delWebhooks
 }
 
 function init() {
@@ -19,15 +20,15 @@ function webhook(service, payload) {
 	var promise;
 	if (service === 'github' && payload.action) {
 		console.log(payload.action);
-		if (payload.action === 'opened' && payload.issue) {
-			promise = handleNewIssue(payload);
-		}
-		if (payload.action === 'opened' && payload.pull_request) {
-			promise = handleNewPullRequest(payload);
-		}
-		if (payload.action === 'closed' && payload.pull_request) {
-			promise = handleClosedPullRequest(payload);
-		}
+		// if (payload.action === 'opened' && payload.issue) {
+		// 	promise = handleNewIssue(payload);
+		// }
+		// if (payload.action === 'opened' && payload.pull_request) {
+		// 	promise = handleNewPullRequest(payload);
+		// }
+		// if (payload.action === 'closed' && payload.pull_request) {
+		// 	promise = handleClosedPullRequest(payload);
+		// }
 		if (payload.action === 'assigned') {
 			promise = handleAssigned(payload);
 		}
@@ -37,12 +38,12 @@ function webhook(service, payload) {
 	}
 	if (service === 'trello' && payload.action) {
 		console.log(payload.action.type);
-		if (payload.action.type === 'updateCard' && payload.action.data.listAfter && payload.action.data.listAfter.id === config.trello.lists.done) {
-			promise = handleDoneCard(payload.action.data.card);
-		}
-		if (payload.action.type === 'updateCard' && payload.action.data.listAfter && payload.action.data.listBefore.id === config.trello.lists.done) {
-			promise = handleReopenedCard(payload.action.data.card);
-		}
+		// if (payload.action.type === 'updateCard' && payload.action.data.listAfter && payload.action.data.listAfter.id === config.trello.lists.done) {
+		// 	promise = handleDoneCard(payload.action.data.card);
+		// }
+		// if (payload.action.type === 'updateCard' && payload.action.data.listAfter && payload.action.data.listBefore.id === config.trello.lists.done) {
+		// 	promise = handleReopenedCard(payload.action.data.card);
+		// }
 	}
 	return promise;
 }
@@ -116,7 +117,7 @@ function handleAssigned(payload) {
 			return trello.moveCardToList(cardId, 'toReview');
 		}
 	}).then(function(card) {
-		console.log('handleAssigned-moveCardToList', '| card id:', cardId, '| list id: ', card.idList);
+		console.log(card);
 		member = members.get('github.login', payload.assignee.login);
 		if (member) {
 			console.log('handleAssigned-get member', '| member github login:', member.github.login);
@@ -134,6 +135,7 @@ function handleUnassigned(payload) {
 	return github.getCardId(issue)
 	.then(function(_cardId) {
 		cardId = _cardId;
+		console.log('handleUnassigned-getCardId', '| card id:', cardId);
 		if (payload.issue) {
 			return trello.moveCardToList(cardId, 'todo');
 		}
@@ -141,8 +143,10 @@ function handleUnassigned(payload) {
 			return trello.moveCardToList(cardId, 'inProgress');
 		}
 	}).then(function(card) {
+		console.log(card);
 		member = members.get('github.login', payload.assignee.login);
 		if (member) {
+			console.log('handleUnassigned-get member', '| member github login:', member.github.login);
 			return trello.deleteMember(cardId, member);
 		}
 	}).catch(function(err) {
@@ -170,5 +174,27 @@ function handleReopenedCard(card) {
 	});
 }
 function getWebhooks() {
-	return trello.getWebhooks();
+	var webhooks = {};
+	return trello.getWebhooks()
+	.then(function(trelloHooks) {
+		webhooks.trello = trelloHooks;
+		return github.getWebhooks();
+	}).then(function(githubHooks) {
+		webhooks.github = githubHooks;
+		console.log(webhooks.github);
+		console.log(webhooks.trello);
+		return webhooks;
+	});
+}
+function delWebhooks() {
+	var webhooks;
+	getWebhooks().then(function(_webhooks) {
+		webhooks = _webhooks;
+		return github.delWebhooks(webhooks.github);
+	}).then(function(deletedHooks) {
+		console.log('delWebhooks', 'number of deleted hooks github:', deletedHooks.length);
+		return trello.delWebhooks(webhooks.trello);
+	}).then(function(deletedHooks) {
+		console.log('delWebhooks', 'number of deleted hooks trello:', deletedHooks.length);
+	});
 }

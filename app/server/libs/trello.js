@@ -18,7 +18,8 @@ module.exports = {
 	deleteMember: deleteMember,
 	moveCardToList: moveCardToList,
 	createWebhook: createWebhook,
-	getWebhooks: getWebhooks
+	getWebhooks: getWebhooks,
+	delWebhooks: delWebhooks
 }
 
 
@@ -76,7 +77,9 @@ function getIssueUrl(card) { // TODO handle array of issues
 	});
 }
 function moveCardToList(cardId, listName) {
-	return trello.putAsync('/1/cards/' + cardId + '/idList', { value: config.lists[listName] });
+	console.log('moveCardToList', '| cardId', cardId, '| board id', config.boards.currentSprint, '| list id', config.lists[listName]);
+	//return trello.putAsync('/1/cards/' + cardId + '/idBoard', { value: config.boards.currentSprint, idList: config.lists[listName] });
+	return trello.putAsync('/1/cards/' + cardId + '/idList', { value: config.lists[listName]});
 }
 function createWebhook() {
 	request.post('https://api.trello.com/1/tokens/' + config.accessToken + '/webhooks/?key=' + config.publicKey, { form: {
@@ -89,10 +92,20 @@ function createWebhook() {
 	});
 }
 function getWebhooks() {
-	//request.del('https://api.trello.com/1/tokens/' + config.accessToken + '/webhooks/56265747191c845fadbc02d7?key=' + config.publicKey, 
-	request.get('https://api.trello.com/1/tokens/' + config.accessToken + '/webhooks/?key=' + config.publicKey, 
-	function(err, res, body) {
-		if (err) { console.log('ERROR', err); }
-		else { console.log(body); }
+	return trello.getAsync('/1/tokens/' + config.accessToken + '/webhooks/?key=' + config.publicKey)
+	.then(function(webhooks) {
+		return webhooks.filter(function(webhook) {
+			return (webhook.callbackURL.indexOf(APP_URL) >= 0);
+		});
 	});
+}
+function delWebhooks(webhooks) {
+	var promises = [];
+	_.each(webhooks, function(webhook) {
+		promises.push(delWebhook(webhook));
+	})
+	return Promise.all(promises);
+}
+function delWebhook(hook) {
+	return trello.delAsync('/1/webhooks/' + hook.id);
 }
