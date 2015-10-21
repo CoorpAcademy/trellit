@@ -1,30 +1,266 @@
 [
-	{
-		"github": {
-			"login": "lcalvy"
-		},
-		"trello": {
-			"id": "55ed4db9b0a1d88b74782bed",
-			"username": "loiccalvy1"
-		}
-	},
-	{
-		"github": {
-			"login": "jordanegiuly"
-		},
-		"trello": {
-			"id": "54385505e1b7758081a8f0ef",
-			"username": "jordaneg"
-		}
-	},
-	{
-		"github": {
-			"login": "godu"
-		},
-		"trello": {
-			"id": "55fa7aac7d53f052afdbe763",
-			"username": "goduuu"
-		}
-	}
+   {
+      "github": {
+         "login": "alexialedoux"
+      },
+      "trello": {  
+         "id":"55fa7691bc04ff4b15ee307c",
+         "username":"alexialedoux",
+         "fullName":"Alexia Ledoux",
+         "bio":""
+      }
+   },
+   {
+      "github": {
+         "login": "anaisdefrsn"
+      },
+      "trello": {  
+         "id":"54b3a08ee33c348978535756",
+         "username":"anaisdefresnoye",
+         "fullName":"Anais de Fresnoye",
+         "bio":""
+      }
+   },
+   {
+      "github": {
+         "login": "antoinepoincare"
+      },
+      "trello": {  
+         "id":"55fa75d890ed53c4b7f3dea0",
+         "username":"antoinepoincare",
+         "fullName":"Antoine Poincare",
+         "bio":""
+      }
+   },
+   {
+      "github": {
+         "login": "amitre2"
+      },
+      "trello": {  
+         "id":"5617ab9b0daf16a16b657a2e",
+         "username":"arnauldmitre",
+         "fullName":"Arnauld Mitre",
+         "bio":""
+      }
+   },
+   {
+      "github": {
+         "login": "godu"
+      },
+      "trello": {  
+         "id":"55fa7aac7d53f052afdbe763",
+         "username":"goduuu",
+         "fullName":"Arthur Weber",
+         "bio":""
+      }
+   },
+   {
+      "github": {
+         "login": "audric-coorp"
+      },
+      "trello": {  
+         "id":"55fa6e071de11b5eaf0861eb",
+         "username":"audricdeziere1",
+         "fullName":"Audric Deziere",
+         "bio":""
+      }
+   },
+   {
+      "github": {
+         "login": "brunocalvo1"
+      },
+      "trello": {  
+         "id":"5617d7192cb71654dd71e16b",
+         "username":"brunocalvo1",
+         "fullName":"Bruno Calvo",
+         "bio":""
+      }
+   },
+   {
+      "github": {
+         "login": "chrisdugne"
+      },
+      "trello": {  
+         "id":"52af2930541e94e652004b97",
+         "username":"chrisdugne",
+         "fullName":"Chris Dugne",
+         "bio":""
+      }
+   },
+   {
+      "github": {
+         "login": "Emmalambert"
+      },
+      "trello": {  
+         "id":"55e57516bc331b207812a9e1",
+         "username":"emmanuelle67",
+         "fullName":"Emmanuelle",
+         "bio":""
+      }
+   },
+   {
+      "github": {
+         "login": "fderetz"
+      },
+      "trello": {  
+         "id":"559cde010d4d86f0a6db09e4",
+         "username":"fannyder",
+         "fullName":"Fanny de RETZ",
+         "bio":""
+      }
+   },
+   {
+      "github": {
+         "login": "FloreBoutin"
+      },
+      "trello": {  
+         "id":"561295803a921c78a929facf",
+         "username":"floreboutin1",
+         "fullName":"Flore Boutin",
+         "bio":""
+      }
+   },
+   {
+      "github": {
+         "login": "fredbenichou"
+      },
+      "trello": {  
+         "id":"5448de2f8fe4307b3bc8e5ba",
+         "username":"frederickbenichou1",
+         "fullName":"Frederick Benichou",
+         "bio":""
+      }
+   },
+   {
+      "github": {
+         "login": "gaellemouraret"
+      },
+      "trello": {  
+         "id":"55fa6e5e938f433370d23bee",
+         "username":"gaelle94",
+         "fullName":"Gaelle",
+         "bio":""
+      }
+   },
+   {
+      "github": {
+         "login": "ingridlethu"
+      },
+      "trello": {  
+         "id":"55facf9b9899a020fb2ee606",
+         "username":"ingridlethu",
+         "fullName":"Ingrid Lethu",
+         "bio":""
+      }
+   },
+   {
+      "github": {
+         "login": "jeanmarctassetto1"
+      },
+      "trello": {  
+         "id":"5624a1e2d12dddf226c19a16",
+         "username":"jeanmarctassetto1",
+         "fullName":"Jean-Marc Tassetto",
+         "bio":""
+      }
+   },
+   {
+      "github": {
+         "login": "jfmengels"
+      },
+      "trello": {  
+         "id":"55faabb71fe9809f1bce6d07",
+         "username":"jeroenengels",
+         "fullName":"Jeroen Engels",
+         "bio":""
+      }
+   },
+   {
+      "github": {
+         "login": "jordanegiuly"
+      },
+      "trello": {  
+         "id":"54385505e1b7758081a8f0ef",
+         "username":"jordaneg",
+         "fullName":"Jordane G",
+         "bio":""
+      }
+   },
+   {
+      "github": {
+         "login": "lfaucon"
+      },
+      "trello": {  
+         "id":"55eec5baa5e88c0c74d418e3",
+         "username":"louisfaucon",
+         "fullName":"Louis Faucon",
+         "bio":""
+      }
+   },
+   {
+      "github": {
+         "login": "lcalvy"
+      },
+      "trello": {  
+         "id":"55ed4db9b0a1d88b74782bed",
+         "username":"loiccalvy1",
+         "fullName":"Loïc Calvy",
+         "bio":""
+      }
+   },
+   {
+      "github": {
+         "login": "matthieuharbonnier"
+      },
+      "trello": {  
+         "id":"561276d36f767ef609f437b8",
+         "username":"matthieuharbonnier",
+         "fullName":"Matthieu Harbonnier",
+         "bio":""
+      }
+   },
+   {
+      "github": {
+         "login": ""
+      },
+      "trello": {  
+         "id":"541c3068357da1c209334583",
+         "username":"nicolas448",
+         "fullName":"Nicolas",
+         "bio":""
+      }
+   },
+   {
+      "github": {
+         "login": "tcroue"
+      },
+      "trello": {  
+         "id":"55fa791e4e703a13af1915c4",
+         "username":"thibaultcroue",
+         "fullName":"Thibault Croue",
+         "bio":""
+      }
+   },
+   {
+      "github": {
+         "login": "T1B0"
+      },
+      "trello": {  
+         "id":"5609074552d59cd5ceb8c4c7",
+         "username":"t1b0",
+         "fullName":"Thibaut Lambert",
+         "bio":""
+      }
+   },
+   {
+      "github": {
+         "login": "armellelavergne"
+      },
+      "trello": {  
+         "id":"544a0d55d275933dea8f27f7",
+         "username":"lavergne",
+         "fullName":"lavergne",
+         "bio":""
+      }
+   }
 ]
-
