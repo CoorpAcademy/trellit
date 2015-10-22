@@ -36,17 +36,17 @@ if (process.env.NODE_ENV === 'development') {
 	process.env.TRELLO_TOKEN = auth.TRELLO_TOKEN;
 
 	url = 'http://46e74278.ngrok.io';
-	boards = {
-		currentSprint: '55fa8a07f150fe773e901c4d'
-	};
-	lists = {
-		backlog: '56058332b9be8215c8ebe4d3',
-		todo: '56058332b9be8215c8ebe4d3',
-		inProgress: '560a581ae66d38d7816086bc',
-		toReview: '55fa8b7006b70ca73d29512e',
-		toTest: '56027a7779381592829ffa89',
-		done: '5601f04b98142f9e3caa68f1'
-	};
+	// boards = {
+	// 	currentSprint: '55fa8a07f150fe773e901c4d'
+	// };
+	// lists = {
+	// 	backlog: '56058332b9be8215c8ebe4d3',
+	// 	todo: '56058332b9be8215c8ebe4d3',
+	// 	inProgress: '560a581ae66d38d7816086bc',
+	// 	toReview: '55fa8b7006b70ca73d29512e',
+	// 	toTest: '56027a7779381592829ffa89',
+	// 	done: '5601f04b98142f9e3caa68f1'
+	// };
 	repos = [
 		{
 			user: 'CoorpAcademy',

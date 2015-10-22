@@ -144,8 +144,7 @@ function handleUnassigned(payload) {
 		if (payload.pull_request) {
 			return trello.moveCardToList(cardId, 'inProgress');
 		}
-	}).then(function(card) {
-		console.log(card);
+	}).then(function() {
 		member = members.get('github.login', payload.assignee.login);
 		if (member) {
 			console.log('handleUnassigned-get member', '| member github login:', member.github.login);
