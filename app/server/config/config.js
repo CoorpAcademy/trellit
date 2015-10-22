@@ -1,7 +1,9 @@
-var url = 'http://gitello.coorpacademy.com';
+var url = 'https://trellit.coorpacademy.com';
 var boards = {
+	backlog: '56128e84b038bd3747a4687d',
 	currentSprint: '561228dc16f33267799133c3'
 };
+
 var lists = {
 	backlog: '562616318bbc8958aa72a18c',
 	todo: '56128ed20f503e65784153ae',
@@ -9,7 +11,7 @@ var lists = {
 	toReview: '561244d2b74a46b20115ea3c',
 	toTest: '561244d5d3830880a92e8c1e',
 	done: '561b9681095780ac16807534'
-}
+};
 var repos = [
 	{
 		user: 'CoorpAcademy',
@@ -27,7 +29,7 @@ var repos = [
 		user: 'CoorpAcademy',
 		repo: 'coorpacademy-www-wp'
 	}
-]
+];
 
 if (process.env.NODE_ENV === 'development') {
 	var auth = require('../../../.auth.dev.json');
