@@ -14,6 +14,9 @@ module.exports = {
 function init() {
 	github.authenticate();
 	trello.init();
+	trello.addTokenMemberToBoards().then(function() {
+		console.log('trello.addToBoards DONE');
+	});
 }
 function createWebhooks() {
 	trello.createWebhook();

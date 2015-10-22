@@ -19,7 +19,8 @@ module.exports = {
 	moveCardToList: moveCardToList,
 	createWebhook: createWebhook,
 	getWebhooks: getWebhooks,
-	delWebhooks: delWebhooks
+	delWebhooks: delWebhooks,
+	addTokenMemberToBoards: addTokenMemberToBoards
 }
 
 
@@ -113,4 +114,20 @@ function delWebhooks(webhooks) {
 }
 function delWebhook(hook) {
 	return trello.delAsync('/1/webhooks/' + hook.id);
+}
+function addTokenMemberToBoards() {
+	var idMember; var promises = [];
+	return trello.getAsync('/1/tokens/' + config.accessToken)
+	.then(function(token) {
+		console.log('addToBoards', '=> token:', token);
+		idMember = token.idMember;
+		_.forEach(config.boards, function(idBoard, boardKey) {
+			promises.push(addMemberToBoard(idBoard, idMember));
+		});
+		return Promise.all(promises);
+	});
+}
+function addMemberToBoard(idBoard, idMember) {
+	console.log(idBoard, idMember);
+	return trello.putAsync('/1/boards/' + idBoard + '/members/' + idMember, { idMember: idMember, 'type': 'normal'})
 }
