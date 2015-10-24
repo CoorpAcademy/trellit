@@ -20,7 +20,9 @@ module.exports = {
 	createWebhook: createWebhook,
 	getWebhooks: getWebhooks,
 	delWebhooks: delWebhooks,
-	addTokenMemberToBoards: addTokenMemberToBoards
+	addTokenMemberToBoards: addTokenMemberToBoards,
+	isClosed: isClosed,
+	isOpened: isOpened
 }
 
 
@@ -131,4 +133,18 @@ function addTokenMemberToBoards() {
 function addMemberToBoard(idBoard, idMember) {
 	console.log(idBoard, idMember);
 	return trello.putAsync('/1/boards/' + idBoard + '/members/' + idMember, { idMember: idMember, 'type': 'normal'})
+}
+function isClosed(payloadData) {
+	var isMovedToDone = (payloadData.listAfter && payloadData.listAfter.id === config.lists.done);
+	var isArchived = (payloadData.card.closed && (!payloadData.old.closed));
+	console.log(isMovedToDone, isArchived);
+	console.log(isMovedToDone || isArchived);
+	return isMovedToDone || isArchived;
+}
+function isOpened(payloadData) {
+	var isRemovedToDone = (payloadData.listAfter && payloadData.listBefore.id === config.lists.done);
+	var isUnarchived = (!(payloadData.card.closed) && payloadData.old.closed);
+	console.log(isRemovedToDone, isUnarchived);
+	console.log(isRemovedToDone || isUnarchived);
+	return isRemovedToDone || isUnarchived;
 }
