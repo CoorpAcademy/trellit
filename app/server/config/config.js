@@ -37,12 +37,12 @@ if (process.env.NODE_ENV === 'development') {
 	process.env.TRELLO_PUBLIC = auth.TRELLO_PUBLIC;
 	process.env.TRELLO_TOKEN = auth.TRELLO_TOKEN;
 
-	url = 'http://46e74278.ngrok.io';
+	url = 'http://aeb0bf00.ngrok.io';
 	boards = {
 		currentSprint: '55fa8a07f150fe773e901c4d'
 	};
 	lists = {
-		backlog: '56058332b9be8215c8ebe4d3',
+		backlog: '5610f178001cf35b47192a86',
 		todo: '56058332b9be8215c8ebe4d3',
 		inProgress: '560a581ae66d38d7816086bc',
 		toReview: '55fa8b7006b70ca73d29512e',
