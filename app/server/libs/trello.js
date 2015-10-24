@@ -34,12 +34,13 @@ function getCard(id) {
 	return trello.getAsync('/1/cards/' + id); 
 }
 function createCard(issue, member) {
+	var idMembers = member ? member.trello.id : null;
 	return trello.postAsync('/1/cards/', { 
 		idList: config.lists.backlog,
-		name: issue.title,
+		name: '#' + issue.number + ' - ' + issue.title,
 		due: null,
 		pos: 'bottom',
-		idMembers: member.trello.id
+		idMembers: idMembers
 	});
 }
 function addMember(cardId, member) {
