@@ -1,4 +1,4 @@
-# Welcome on Trellit
+# Welcome on Trellit!
 
 Hi!
 
