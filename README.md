@@ -71,8 +71,9 @@ github | open issue | create Trello card, add member, attach issue to card, comm
 gihuhb | close issue | TODO
 github | open PR | get issue and card, attach PR to card
 github | close PR | get card, move it to "To test"
-github | assign issue | get card, add member, move card to "In progress" or "To Review" (PR assigned)
-github | unassign issue | get card, remove member, move card to "TODO" or "In progress" (PR unassigned)
+github | assign issue | get card, add member, move card to "In progress" PR assigned
+github | assign PR | get card, add member, move card to "To Review". If assigned user = PR user, move to "In progress"
+github | unassign issue | get card, remove member, move card to "TODO"
 trello | move card to Done | get issue, close it
 trello | move card from Done | get issue, open it
 
