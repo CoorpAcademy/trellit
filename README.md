@@ -1,5 +1,12 @@
-# trellit
-Synchronization app between Trello and Github
+# Welcome on Trellit
+
+Hi!
+
+Trellit is a synchronization application between Trello and Github. Trellit is using Node JS technology.
+
+This Readme will first explain the install steps. Then it presents all actions managed by Trellit.
+
+# Run the project
 
 ## Install the project
 
@@ -27,7 +34,7 @@ Copy paster the file "auth.json" and rename it by '.auth.json'
 
 - To get your TRELLO_TOKEN: https://trello.com/1/connect?key=TRELLO_PUBLIC&name=Trellit&response_type=token&expiration=never&scope=read,write
 
-### Config
+### config
 
 - In config.js, you need to edit the url variable. In the development part, enter the value returned by the ngrok script.
 
@@ -51,10 +58,21 @@ Set the list of your Github and Trello members here. A member needs to have the 
    }
 ```
 
-./ngrok VERSION http PORT
-
-
-
 ## Run the project
 
 `NODE_ENV=development npm start`
+
+
+# Rules
+
+Origin | Trigger | Actions
+---|---|---
+github | open issue | do this and this
+gihuhb | close issue | do this
+github | open PR | TODO
+github | close PR | TODO
+github | assign issue | TODO
+github | unassign issue | TODO
+trello | move card to Done | TODO
+trellot | move card from Done | TODO
+
