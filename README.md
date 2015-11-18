@@ -65,14 +65,14 @@ Set the list of your Github and Trello members here. A member needs to have the 
 
 # Rules
 
-Origin | Trigger | Actions
+Origin | Trigger | Actions
 ---|---|---
-github | open issue | do this and this
-gihuhb | close issue | do this
-github | open PR | TODO
-github | close PR | TODO
-github | assign issue | TODO
-github | unassign issue | TODO
-trello | move card to Done | TODO
-trellot | move card from Done | TODO
+github | open issue | create Trello card, add member, attach issue to card, comment card on issue
+gihuhb | close issue | TODO
+github | open PR | get issue and card, attach PR to card
+github | close PR | get card, move it to "To test"
+github | assign issue | get card, add member, move card to "In progress" or "To Review" (PR assigned)
+github | unassign issue | get card, remove member, move card to "TODO" or "In progress" (PR unassigned)
+trello | move card to Done | get issue, close it
+trello | move card from Done | get issue, open it
 

@@ -10,6 +10,7 @@ if (process.env.NODE_ENV === 'development') {
 	process.env.TRELLO_TOKEN = auth.TRELLO_TOKEN;
 
 	url = 'http://937aba9e.ngrok.io';
+	url = 'http://14623acb.ngrok.io';
 	boards = require('./boards.development.json');
 	repos = require('./repos.development.json');
 }
