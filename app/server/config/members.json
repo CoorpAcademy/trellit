@@ -259,7 +259,18 @@
       "trello": {  
          "id":"544a0d55d275933dea8f27f7",
          "username":"lavergne",
-         "fullName":"lavergne",
+         "fullName":"Armelle Lavergne",
+         "bio":""
+      }
+   },
+   {
+      "github": {
+         "login": "ostro"
+      },
+      "trello": {  
+         "id":"561242cbf754cab8cae6d06a",
+         "username":"arnaudlebreton4",
+         "fullName":"Arnaud Lebreton",
          "bio":""
       }
    }
