@@ -21,8 +21,10 @@ module.exports = {
 	getWebhooks: getWebhooks,
 	delWebhooks: delWebhooks,
 	addTokenMemberToBoards: addTokenMemberToBoards,
+	isBeingClosed: isBeingClosed,
 	isClosed: isClosed,
-	isOpened: isOpened
+	closeCard: closeCard,
+	isBeingOpened: isBeingOpened
 }
 
 
@@ -134,14 +136,25 @@ function addMemberToBoard(idBoard, idMember) {
 	console.log(idBoard, idMember);
 	return trello.putAsync('/1/boards/' + idBoard + '/members/' + idMember, { idMember: idMember, 'type': 'normal'})
 }
-function isClosed(payloadData) {
+function isBeingClosed(payloadData) {
 	var isMovedToDone = (payloadData.listAfter && payloadData.listAfter.id === config.lists.done);
 	var isArchived = (payloadData.card.closed && (!payloadData.old.closed));
 	console.log(isMovedToDone, isArchived);
 	console.log(isMovedToDone || isArchived);
 	return isMovedToDone || isArchived;
 }
-function isOpened(payloadData) {
+function isClosed(card) {
+	console.log(card.closed || (card.idBoard === config.boards.currentSprint && card.idList === config.lists.done));
+	return (card.closed || (card.idBoard === config.boards.currentSprint && card.idList === config.lists.done));
+}
+function closeCard(card) {
+	if (card.idBoard === config.boards.currentSprint) {
+		return moveCardToList(card.id, 'done');
+	} else {
+		return trello.putAsync('/1/cards/' + card.id , { closed: true });
+	}
+}
+function isBeingOpened(payloadData) {
 	var isRemovedToDone = (payloadData.listAfter && payloadData.listBefore.id === config.lists.done);
 	var isUnarchived = (!(payloadData.card.closed) && payloadData.old.closed);
 	console.log(isRemovedToDone, isUnarchived);

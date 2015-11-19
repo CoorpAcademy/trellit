@@ -35,6 +35,9 @@ function webhook(service, payload) {
 		if (payload.action === 'closed' && payload.pull_request) {
 			return handleClosedPullRequest(payload);
 		}
+		if (payload.action === 'closed' && payload.issue) {
+			return handleClosedIssue(payload);
+		}
 		if (payload.action === 'assigned') {
 			return handleAssigned(payload);
 		}
@@ -43,10 +46,10 @@ function webhook(service, payload) {
 		}
 	}
 	if (service === 'trello' && payload.action) {
-		if (payload.action.type === 'updateCard' && trello.isClosed(payload.action.data)) {
+		if (payload.action.type === 'updateCard' && trello.isBeingClosed(payload.action.data)) {
 			return handleDoneCard(payload.action.data.card);
 		}
-		if (payload.action.type === 'updateCard' && trello.isOpened(payload.action.data)) {
+		if (payload.action.type === 'updateCard' && trello.isBeingOpened(payload.action.data)) {
 			return handleReopenedCard(payload.action.data.card);
 		}
 	}
@@ -106,6 +109,22 @@ function handleClosedPullRequest(payload) {
 			}
 		});
 	}
+}
+function handleClosedIssue(payload) {
+	var issue = payload.issue; var card;
+	issue.repository = payload.repository;
+	return github.getCardId(issue)
+	.then(function(shortLink) {
+		return trello.getCard(shortLink);
+	}).then(function(_card) {
+		card = _card;
+		if (trello.isClosed(card)) {
+			return; // do nothing
+		} else {
+			console.log('handleClosedIssue', '| issue number:', issue.number, '| issue repo:', issue.repository.name, '| card shortLink', card.shortLink);
+			return trello.closeCard(card);
+		}
+	});
 }
 function handleAssigned(payload) {
 	var issue = payload.issue || payload.pull_request; var member; var cardId;
