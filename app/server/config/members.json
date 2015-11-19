@@ -273,5 +273,27 @@
          "fullName":"Arnaud Lebreton",
          "bio":""
       }
+   },
+   {
+      "github": {
+         "login": "jomaora"
+      },
+      "trello": {  
+         "id":"4fa23fb211b91e3e65b5e843",
+         "username":"joanmanuelortegaardila",
+         "fullName":"Joan-Manuel Ortega-Ardila",
+         "bio":""
+      }
+   },
+   {
+      "github": {
+         "login": "esa-coorp"
+      },
+      "trello": {  
+         "id":"563785a574b325ce5a2be94e",
+         "username":"ericsampaio4",
+         "fullName":"Eric Sampaio",
+         "bio":""
+      }
    }
 ]
