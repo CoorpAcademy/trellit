@@ -119,7 +119,11 @@ function handleAssigned(payload) {
 			return trello.moveCardToList(cardId, 'inProgress');
 		}
 		if (payload.pull_request) {
-			return trello.moveCardToList(cardId, 'toReview');
+			if (payload.assignee.login === payload.pull_request.user.login) {
+				return trello.moveCardToList(cardId, 'inProgress');
+			} else {
+				return trello.moveCardToList(cardId, 'toReview');
+			}
 		}
 	}).then(function() {
 		member = members.get('github.login', payload.assignee.login);
@@ -144,13 +148,19 @@ function handleUnassigned(payload) {
 			return trello.moveCardToList(cardId, 'todo');
 		}
 		if (payload.pull_request) {
-			return trello.moveCardToList(cardId, 'inProgress');
+			// do nothing
+			return;
 		}
 	}).then(function() {
 		member = members.get('github.login', payload.assignee.login);
 		if (member) {
 			console.log('handleUnassigned-get member', '| member github login:', member.github.login);
-			return trello.deleteMember(cardId, member);
+			if (payload.pull_request && payload.assignee.login === payload.pull_request.user.login) {
+				// do nothing
+				return;
+			} else {
+				return trello.deleteMember(cardId, member);
+			}
 		}
 	}).catch(function(err) {
 		console.log(err);
