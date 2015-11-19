@@ -14,5 +14,9 @@
 	{
 		"user": "CoorpAcademy",
 		"repo": "coorpacademy-www-wp"
+	},
+	{
+		"user": "CoorpAcademy",
+		"repo": "coorpacademy-cockpit"
 	}
 ]
