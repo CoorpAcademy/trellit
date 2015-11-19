@@ -68,7 +68,7 @@ Set the list of your Github and Trello members here. A member needs to have the 
 Origin | Trigger | Actions
 ---|---|---
 github | open issue | create Trello card, add member, attach issue to card, comment card on issue
-gihuhb | close issue | TODO
+github | close issue | move Trellot card to "Done", or achive card
 github | open PR | get issue and card, attach PR to card
 github | close PR | get card, move it to "To test"
 github | assign issue | get card, add member, move card to "In progress" PR assigned
