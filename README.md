@@ -71,6 +71,7 @@ github | open issue | create Trello card, add member, attach issue to card, comm
 github | close issue | move Trellot card to "Done", or achive card
 github | open PR | get issue and card, attach PR to card
 github | close PR | get card, move it to "To test"
+github | reopen issue | create card to backlog (if any card), open card
 github | assign issue | get card, add member, move card to "In progress" PR assigned
 github | assign PR | get card, add member, move card to "To Review". If assigned user = PR user, move to "In progress"
 github | unassign issue | get card, remove member, move card to "TODO"

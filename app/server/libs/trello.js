@@ -24,6 +24,7 @@ module.exports = {
 	isBeingClosed: isBeingClosed,
 	isClosed: isClosed,
 	closeCard: closeCard,
+	openCard: openCard,
 	isBeingOpened: isBeingOpened
 }
 
@@ -35,7 +36,7 @@ function init() {
 	console.log('trello.init done');
 }
 function getCard(id) {
-	return trello.getAsync('/1/cards/' + id); 
+	return id? trello.getAsync('/1/cards/' + id) : null;
 }
 function createCard(issue, member) {
 	var idMembers = member ? member.trello.id : null;
@@ -48,7 +49,7 @@ function createCard(issue, member) {
 	});
 }
 function addMember(cardId, member) {
-	console.log(member.trello.id);
+	console.log('trello.addMember', '| member.trello.id', member.trello.id);
 	return trello.postAsync('/1/cards/' + cardId + '/idMembers', { value: member.trello.id })
 	.catch(function(err) {
 		if (err.responseBody === 'member is already on the card') {
@@ -79,7 +80,6 @@ function getIssueUrl(card) { // TODO handle array of issues
 			}
 		});
 		return issueUrl;
-		console.log(attachments);
 	});
 }
 function moveCardToList(cardId, listName) {
@@ -133,18 +133,15 @@ function addTokenMemberToBoards() {
 	});
 }
 function addMemberToBoard(idBoard, idMember) {
-	console.log(idBoard, idMember);
+	console.log('trello.addMemberToBoard', '| idBoard', idBoard, '| idMember', idMember);
 	return trello.putAsync('/1/boards/' + idBoard + '/members/' + idMember, { idMember: idMember, 'type': 'normal'})
 }
 function isBeingClosed(payloadData) {
 	var isMovedToDone = (payloadData.listAfter && payloadData.listAfter.id === config.lists.done);
 	var isArchived = (payloadData.card.closed && (!payloadData.old.closed));
-	console.log(isMovedToDone, isArchived);
-	console.log(isMovedToDone || isArchived);
 	return isMovedToDone || isArchived;
 }
 function isClosed(card) {
-	console.log(card.closed || (card.idBoard === config.boards.currentSprint && card.idList === config.lists.done));
 	return (card.closed || (card.idBoard === config.boards.currentSprint && card.idList === config.lists.done));
 }
 function closeCard(card) {
@@ -154,10 +151,15 @@ function closeCard(card) {
 		return trello.putAsync('/1/cards/' + card.id , { closed: true });
 	}
 }
+function openCard(card) {
+	if (card.idBoard === config.boards.currentSprint) {
+		return moveCardToList(card.id, 'inProgress');
+	} else {
+		return trello.putAsync('/1/cards/' + card.id , { closed: false });
+	}
+}
 function isBeingOpened(payloadData) {
 	var isRemovedToDone = (payloadData.listAfter && payloadData.listBefore.id === config.lists.done);
 	var isUnarchived = (!(payloadData.card.closed) && payloadData.old.closed);
-	console.log(isRemovedToDone, isUnarchived);
-	console.log(isRemovedToDone || isUnarchived);
 	return isRemovedToDone || isUnarchived;
 }

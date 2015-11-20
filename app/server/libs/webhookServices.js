@@ -25,9 +25,12 @@ function createWebhooks() {
 function webhook(service, payload) {
 	var promise;
 	if (service === 'github' && payload.action) {
-		console.log(payload.action);
+		console.log('payload.action github', payload.action);
 		if (payload.action === 'opened' && payload.issue) {
 			return handleNewIssue(payload);
+		}
+		if (payload.action === 'reopened' && payload.issue) {
+			return handleReOpenedIssue(payload);
 		}
 		if (payload.action === 'opened' && payload.pull_request) {
 			return handleNewPullRequest(payload);
@@ -76,6 +79,21 @@ function handleNewIssue(payload) {
 		return github.attachCard(issue, card);
 	});
 }
+function handleReOpenedIssue(payload) {
+	var issue = payload.issue;
+	issue.repository = payload.repository;
+
+	return github.getCardId(issue)
+	.then(function(shortLink) {
+		return trello.getCard(shortLink);
+	}).then(function(card) {
+		if (card && trello.isClosed(card)) {
+			return trello.openCard(card);
+		} else {
+			return handleNewIssue(payload);
+		}
+	});
+}
 function handleNewPullRequest(payload) {
 	var pullRequest = payload.pull_request; var card;
 	pullRequest.repository = payload.repository;
@@ -111,17 +129,14 @@ function handleClosedPullRequest(payload) {
 	}
 }
 function handleClosedIssue(payload) {
-	var issue = payload.issue; var card;
+	var issue = payload.issue;
 	issue.repository = payload.repository;
 	return github.getCardId(issue)
 	.then(function(shortLink) {
 		return trello.getCard(shortLink);
-	}).then(function(_card) {
-		card = _card;
-		if (trello.isClosed(card)) {
-			return; // do nothing
-		} else {
-			console.log('handleClosedIssue', '| issue number:', issue.number, '| issue repo:', issue.repository.name, '| card shortLink', card.shortLink);
+	}).then(function(card) {
+		if (card && !trello.isClosed(card)) {
+			console.log('handleClosedIssue', '| issue number:', issue.number, '| issue repo:', issue.repository.name, '| card shortLink', card.shortlink);
 			return trello.closeCard(card);
 		}
 	});
