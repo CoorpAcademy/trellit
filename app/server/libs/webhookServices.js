@@ -87,8 +87,10 @@ function handleReOpenedIssue(payload) {
 	.then(function(shortLink) {
 		return trello.getCard(shortLink);
 	}).then(function(card) {
-		if (card && trello.isClosed(card)) {
-			return trello.openCard(card);
+		if (card) {
+			if (trello.isClosed(card)) {
+				return trello.openCard(card);
+			}
 		} else {
 			return handleNewIssue(payload);
 		}
