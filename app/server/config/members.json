@@ -295,5 +295,27 @@
          "fullName":"Eric Sampaio",
          "bio":""
       }
+   },
+   {
+      "github": {
+         "login": "GuillaumeCoorp"
+      },
+      "trello": {  
+         "id":"55fa70ddc6abcb8daf91d438",
+         "username":"guillaumelenzinger",
+         "fullName":"Guillaume Lenzinger",
+         "bio":""
+      }
+   },
+   {
+      "github": {
+         "login": "JessicaDehler"
+      },
+      "trello": {  
+         "id":"55ff0871786cdfa2df348d90",
+         "username":"jessica_dehler",
+         "fullName":"Jessica Dehler",
+         "bio":""
+      }
    }
 ]

@@ -8,8 +8,7 @@ if (process.env.NODE_ENV === 'development') {
 	process.env.GITHUB_ACCESS_TOKEN = auth.GITHUB_ACCESS_TOKEN;
 	process.env.TRELLO_PUBLIC = auth.TRELLO_PUBLIC;
 	process.env.TRELLO_TOKEN = auth.TRELLO_TOKEN;
-
-	url = 'http://43e9d3e3.ngrok.io';
+	url = 'http://111dfd17.ngrok.io';
 	boards = require('./boards.development.json');
 	repos = require('./repos.development.json');
 }
