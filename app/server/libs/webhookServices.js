@@ -138,11 +138,12 @@ function handleClosedIssue(payload) {
 	var issue = payload.issue;
 	issue.repository = payload.repository;
 	return github.getCardId(issue)
-	.then(function(shortLink) {
-		return trello.getCard(shortLink);
+	.then(function(cardId) {
+		console.log('handleClosedIssue-getCardId', '| card id:', cardId);
+		return trello.getCard(cardId);
 	}).then(function(card) {
 		if (card && !trello.isClosed(card)) {
-			console.log('handleClosedIssue', '| issue number:', issue.number, '| issue repo:', issue.repository.name, '| card shortLink', card.shortlink);
+			console.log('handleClosedIssue', '| issue number:', issue.number, '| issue repo:', issue.repository.name, '| card id', card.id);
 			return trello.closeCard(card);
 		}
 	});
