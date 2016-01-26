@@ -103,6 +103,9 @@ function getCardId(issue) {
 	}).then(function(comments) {
 		console.log('github.getCardId-getCommentsAsync', '| comments.length', comments.length);
 		_.each(comments, function(comment) {
+			if (cardShortId) {
+				return;
+			}
 			comment = comment.body.replace(/&#x2F;/g, '/');
 			var trelloCardUrls = comment.match(/https:\/\/trello.com\/c\/[^\"]*/g);
 			if (trelloCardUrls) {
