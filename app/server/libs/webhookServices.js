@@ -143,7 +143,7 @@ function handleClosedIssue(payload) {
 		return trello.getCard(cardId);
 	}).then(function(card) {
 		if (card && !trello.isClosed(card)) {
-			console.log('handleClosedIssue', '| issue number:', issue.number, '| issue repo:', issue.repository.name, '| card shortLink', card.shortlink);
+			console.log('handleClosedIssue', '| issue number:', issue.number, '| issue repo:', issue.repository.name, '| card id', card.id);
 			return trello.closeCard(card);
 		}
 	});
