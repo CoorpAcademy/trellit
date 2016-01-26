@@ -6,6 +6,7 @@ var request = require('request');
 var URL = require('url');
 var _ = require('lodash');
 var github;
+var SKIP_TRELLIT_STRING = '[skip trellit]';
 
 
 module.exports = {
@@ -17,7 +18,8 @@ module.exports = {
 	attachCard: attachCard,
 	getAssociatedIssue: getAssociatedIssue,
 	urlToIssue: urlToIssue,
-	editIssue: editIssue
+	editIssue: editIssue,
+	skipCreateCard: skipCreateCard
 }
 
 
@@ -159,4 +161,7 @@ function editIssue(issue, params) {
 		number: issue.number,
 		state: params.state
 	});
+}
+function skipCreateCard(issue) {
+	return (issue.body.indexOf(SKIP_TRELLIT_STRING) === 0);
 }

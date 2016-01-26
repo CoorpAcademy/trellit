@@ -62,6 +62,10 @@ function handleNewIssue(payload) {
 	var issue = payload.issue; var card;
 	issue.repository = payload.repository;
 	console.log('handleNewIssue', '| issue number:', issue.number, '| issue repo:', issue.repository.name);
+	if (github.skipCreateCard(issue)) {
+		console.log('handleNewIssue | skip createCard | DONE');
+		return;
+	};
 	var member = members.get('github.login', payload.issue.user.login);
 	if (member) {
 		console.log('handleNewIssue-get member', '| member github login:', member.github.login);
