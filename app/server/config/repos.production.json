@@ -18,5 +18,13 @@
 	{
 		"user": "CoorpAcademy",
 		"repo": "coorpacademy-cockpit"
+	},
+	{
+		"user": "CoorpAcademy",
+		"repo": "coorpacademy-backoffice"
+	},
+	{
+		"user": "CoorpAcademy",
+		"repo": "components"
 	}
 ]
