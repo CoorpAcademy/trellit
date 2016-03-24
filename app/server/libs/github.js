@@ -128,7 +128,8 @@ function attachCard(issue, card) {
 	});
 }
 function getAssociatedIssue(pullRequest) {
-	var numbers = pullRequest.body.match(/\#[0-9]*/g); var number;
+	var bodyAndTitle = pullRequest.title + ' ' + pullRequest.body
+	var numbers = bodyAndTitle.match(/\#[0-9]*/g); var number;
 	if (numbers) {
 		number = numbers[0].replace('#', '');
 	}
