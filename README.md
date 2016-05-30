@@ -1,6 +1,6 @@
 # Welcome on Trellit!
 
-Hi!
+Hi,
 
 Trellit is a synchronization application between Trello and Github. Trellit is using Node JS technology.
 
